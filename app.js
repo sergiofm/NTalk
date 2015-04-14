@@ -41,6 +41,6 @@ io.set('authorization', function(data, accept) {
 load('models').then('controllers').then('routes').into(app);
 load('sockets').into(io);
 
-server.listen(3000, function(){
+server.listen(process.env.PORT, process.env.IP, function(){
 	console.log("Ntalk no ar, bitches!");
 });

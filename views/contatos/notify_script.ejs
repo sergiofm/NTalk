@@ -1,10 +1,36 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
-	var socket = io.connect('http://localhost:3000');
-	socket.on('new-message', function(data) {
-		alert('Nova mensagem de '+data.email);
-		var chat = document.getElementById('chat_' + data.email);
-		chat.href += '/' + data.sala;
-		chat.style = "color: #F00"
+var socket = io.connect('https://ntalk-sergiofm.c9.io');
+var notify = function(data) {
+	var id = 'notify_' + data.el;
+	var notify = document.getElementById(id);
+    if (notify) {
+      notify.textContent = data.msg;
+      notify.className = data.classes;
+    }
+};
+socket.on('notify-onlines', function(email) {
+	notify({
+		el: email,
+		msg: 'Online', 
+		classes: 'label label-success'
 	});
+});
+socket.on('notify-offline', function(email) {
+	notify({
+		el: email,
+		msg: 'Offline', 
+		classes: 'label'
+	});
+});
+socket.on('new-message', function(data) {
+	notify({
+		el: data.email,
+		msg: 'Mensagem', 
+		classes: 'label label-important'
+	});
+	var id = 'chat_' + data.email;
+	var chat = document.getElementById(id);
+	chat.href += '/' + data.sala;
+});
 </script>
